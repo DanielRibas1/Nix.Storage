@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ConfigurationModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityType Name="Application">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ChangeHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EntityName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="OriginalValue" Type="nvarchar(max)" />
+          <Property Name="ChangedValue" Type="nvarchar(max)" />
+          <Property Name="Action" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="AgentName" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="ChangeDate" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Group">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Key" Type="nvarchar" MaxLength="50" />
+          <Property Name="ApplicationId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Setting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Key" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="ItemType" Type="nvarchar" MaxLength="256" />
+          <Property Name="Value" Type="nvarchar(max)" />
+          <Property Name="Body" Type="xml" />
+          <Property Name="GroupId" Type="int" Nullable="false" />
+          <Property Name="MapId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SettingMapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Key" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="GroupId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Group_ToApplication">
+          <End Role="Application" Type="Self.Application" Multiplicity="1" />
+          <End Role="Group" Type="Self.Group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Application">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Group">
+              <PropertyRef Name="ApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Setting_ToGroup">
+          <End Role="Group" Type="Self.Group" Multiplicity="1" />
+          <End Role="Setting" Type="Self.Setting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Setting">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Setting_ToSettingMapping">
+          <End Role="SettingMapping" Type="Self.SettingMapping" Multiplicity="1" />
+          <End Role="Setting" Type="Self.Setting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SettingMapping">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Setting">
+              <PropertyRef Name="MapId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SettingMapping_ToGroup">
+          <End Role="Group" Type="Self.Group" Multiplicity="1" />
+          <End Role="SettingMapping" Type="Self.SettingMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SettingMapping">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ConfigurationModelStoreContainer">
+          <EntitySet Name="Application" EntityType="Self.Application" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ChangeHistory" EntityType="Self.ChangeHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Group" EntityType="Self.Group" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Setting" EntityType="Self.Setting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SettingMapping" EntityType="Self.SettingMapping" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Group_ToApplication" Association="Self.FK_Group_ToApplication">
+            <End Role="Application" EntitySet="Application" />
+            <End Role="Group" EntitySet="Group" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Setting_ToGroup" Association="Self.FK_Setting_ToGroup">
+            <End Role="Group" EntitySet="Group" />
+            <End Role="Setting" EntitySet="Setting" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Setting_ToSettingMapping" Association="Self.FK_Setting_ToSettingMapping">
+            <End Role="SettingMapping" EntitySet="SettingMapping" />
+            <End Role="Setting" EntitySet="Setting" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SettingMapping_ToGroup" Association="Self.FK_SettingMapping_ToGroup">
+            <End Role="Group" EntitySet="Group" />
+            <End Role="SettingMapping" EntitySet="SettingMapping" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ConfigurationModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="ConfigEntities" annotation:LazyLoadingEnabled="false">
+          <EntitySet Name="Applications" EntityType="ConfigurationModel.Application" />
+          <EntitySet Name="Groups" EntityType="ConfigurationModel.Group" />
+          <EntitySet Name="Settings" EntityType="ConfigurationModel.Setting" />
+          <EntitySet Name="SettingMappings" EntityType="ConfigurationModel.SettingMapping" />
+          <AssociationSet Name="FK_Group_ToApplication" Association="ConfigurationModel.FK_Group_ToApplication">
+            <End Role="Application" EntitySet="Applications" />
+            <End Role="Group" EntitySet="Groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Setting_ToGroup" Association="ConfigurationModel.FK_Setting_ToGroup">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="Setting" EntitySet="Settings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SettingMapping_ToGroup" Association="ConfigurationModel.FK_SettingMapping_ToGroup">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="SettingMapping" EntitySet="SettingMappings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Setting_ToSettingMapping" Association="ConfigurationModel.FK_Setting_ToSettingMapping">
+            <End Role="SettingMapping" EntitySet="SettingMappings" />
+            <End Role="Setting" EntitySet="Settings" />
+          </AssociationSet>
+          <EntitySet Name="ChangeHistories" EntityType="ConfigurationModel.ChangeHistory" />
+        </EntityContainer>
+        <EntityType Name="Application">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Groups" Relationship="ConfigurationModel.FK_Group_ToApplication" FromRole="Application" ToRole="Group" />
+        </EntityType>
+        <EntityType Name="Group">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Key" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ApplicationId" Nullable="false" />
+          <NavigationProperty Name="Application" Relationship="ConfigurationModel.FK_Group_ToApplication" FromRole="Group" ToRole="Application" />
+          <NavigationProperty Name="Settings" Relationship="ConfigurationModel.FK_Setting_ToGroup" FromRole="Group" ToRole="Setting" />
+          <NavigationProperty Name="SettingMappings" Relationship="ConfigurationModel.FK_SettingMapping_ToGroup" FromRole="Group" ToRole="SettingMapping" />
+        </EntityType>
+        <EntityType Name="Setting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Key" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Type" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ItemType" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Value" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Body" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="GroupId" Nullable="false" />
+          <Property Type="Int32" Name="MapId" Nullable="false" />
+          <NavigationProperty Name="Group" Relationship="ConfigurationModel.FK_Setting_ToGroup" FromRole="Setting" ToRole="Group" />
+          <NavigationProperty Name="SettingMapping" Relationship="ConfigurationModel.FK_Setting_ToSettingMapping" FromRole="Setting" ToRole="SettingMapping" />
+        </EntityType>
+        <EntityType Name="SettingMapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Key" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="GroupId" Nullable="false" />
+          <NavigationProperty Name="Group" Relationship="ConfigurationModel.FK_SettingMapping_ToGroup" FromRole="SettingMapping" ToRole="Group" />
+          <NavigationProperty Name="Settings" Relationship="ConfigurationModel.FK_Setting_ToSettingMapping" FromRole="SettingMapping" ToRole="Setting" />
+        </EntityType>
+        <Association Name="FK_Group_ToApplication">
+          <End Type="ConfigurationModel.Application" Role="Application" Multiplicity="1" />
+          <End Type="ConfigurationModel.Group" Role="Group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Application">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Group">
+              <PropertyRef Name="ApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Setting_ToGroup">
+          <End Type="ConfigurationModel.Group" Role="Group" Multiplicity="1" />
+          <End Type="ConfigurationModel.Setting" Role="Setting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Setting">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SettingMapping_ToGroup">
+          <End Type="ConfigurationModel.Group" Role="Group" Multiplicity="1" />
+          <End Type="ConfigurationModel.SettingMapping" Role="SettingMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SettingMapping">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Setting_ToSettingMapping">
+          <End Type="ConfigurationModel.SettingMapping" Role="SettingMapping" Multiplicity="1" />
+          <End Type="ConfigurationModel.Setting" Role="Setting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SettingMapping">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Setting">
+              <PropertyRef Name="MapId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ChangeHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="EntityName" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="OriginalValue" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ChangedValue" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Action" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="AgentName" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Type="DateTime" Name="ChangeDate" Nullable="false" Precision="7" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ConfigurationModelStoreContainer" CdmEntityContainer="ConfigEntities">
+          <EntitySetMapping Name="Applications">
+            <EntityTypeMapping TypeName="ConfigurationModel.Application">
+              <MappingFragment StoreEntitySet="Application">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Groups">
+            <EntityTypeMapping TypeName="ConfigurationModel.Group">
+              <MappingFragment StoreEntitySet="Group">
+                <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Settings">
+            <EntityTypeMapping TypeName="ConfigurationModel.Setting">
+              <MappingFragment StoreEntitySet="Setting">
+                <ScalarProperty Name="MapId" ColumnName="MapId" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="ItemType" ColumnName="ItemType" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SettingMappings">
+            <EntityTypeMapping TypeName="ConfigurationModel.SettingMapping">
+              <MappingFragment StoreEntitySet="SettingMapping">
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ChangeHistories">
+            <EntityTypeMapping TypeName="ConfigurationModel.ChangeHistory">
+              <MappingFragment StoreEntitySet="ChangeHistory">
+                <ScalarProperty Name="ChangeDate" ColumnName="ChangeDate" />
+                <ScalarProperty Name="AgentName" ColumnName="AgentName" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="ChangedValue" ColumnName="ChangedValue" />
+                <ScalarProperty Name="OriginalValue" ColumnName="OriginalValue" />
+                <ScalarProperty Name="EntityName" ColumnName="EntityName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

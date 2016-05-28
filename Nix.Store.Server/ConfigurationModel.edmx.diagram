@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8f7510fc1d994ce9a507810a21986b9e" Name="Diagram1">
+        <EntityTypeShape EntityType="ConfigurationModel.Application" Width="1.5" PointX="3.625" PointY="6.75" />
+        <EntityTypeShape EntityType="ConfigurationModel.Group" Width="1.5" PointX="6.5" PointY="8.875" />
+        <EntityTypeShape EntityType="ConfigurationModel.Setting" Width="1.5" PointX="6.5" PointY="4.875" />
+        <EntityTypeShape EntityType="ConfigurationModel.SettingMapping" Width="1.5" PointX="9.25" PointY="6.25" />
+        <AssociationConnector Association="ConfigurationModel.FK_Group_ToApplication" />
+        <AssociationConnector Association="ConfigurationModel.FK_Setting_ToGroup" />
+        <AssociationConnector Association="ConfigurationModel.FK_SettingMapping_ToGroup" />
+        <AssociationConnector Association="ConfigurationModel.FK_Setting_ToSettingMapping" />
+        <EntityTypeShape EntityType="ConfigurationModel.ChangeHistory" Width="1.5" PointX="9.625" PointY="3.625" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
